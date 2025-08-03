@@ -1,11 +1,14 @@
-﻿from fastapi import APIRouter, HTTPException
-from ...services.decryptor import decrypt_file
+﻿# app/api/v1/decrypt.py
+from fastapi import APIRouter
+from pydantic import BaseModel
+from app.rabbitmq import publish_file_decrypted
 
 router = APIRouter()
 
-@router.post(\"/decrypt\")
-async def decrypt_endpoint(payload: dict):
-    file_id = payload.get(\"file_id\")
-    if not file_id:
-        raise HTTPException(status_code=400, detail=\"file_id required\")
-    return decrypt_file(file_id)
+class DecryptRequest(BaseModel):
+    file_id: str
+
+@router.post("/decrypt")
+async def decrypt_file(req: DecryptRequest):
+    await publish_file_decrypted(req.file_id, metadata={})
+    return {"status": "ok", "file_id": req.file_id}
