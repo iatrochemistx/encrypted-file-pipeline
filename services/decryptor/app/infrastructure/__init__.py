@@ -1,0 +1,1 @@
+# Infrastructure layer - contains external dependencies and implementations 

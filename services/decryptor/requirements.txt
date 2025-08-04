@@ -2,3 +2,7 @@
 uvicorn[standard]
 pydantic
 aio-pika
+cryptography
+pytest-asyncio
+aiofiles
+httpx
